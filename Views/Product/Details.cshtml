@@ -1,0 +1,32 @@
+﻿@model ABCRetailers.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container py-4">
+    <h2>Product Details</h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="@Model.ProductName" class="mb-3" style="width:200px; height:200px; object-fit:cover;" />
+            }
+            <dl class="row">
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9">@Model.ProductName</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">Price</dt>
+                <dd class="col-sm-9">$@Model.Price</dd>
+
+                <dt class="col-sm-3">Stock Available</dt>
+                <dd class="col-sm-9">@Model.StockAvailable</dd>
+            </dl>
+            <a asp-action="Edit" asp-route-partitionKey="@Model.PartitionKey" asp-route-rowKey="@Model.RowKey" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>

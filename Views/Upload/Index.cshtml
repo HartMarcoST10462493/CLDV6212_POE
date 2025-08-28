@@ -1,0 +1,41 @@
+﻿@model ABCRetailers.Models.FileUploadModel
+
+@{
+    ViewData["Title"] = "Upload Proof of Payment";
+}
+
+<div class="container py-4">
+    <h2>Upload Proof of Payment</h2>
+
+    <div class="card shadow-sm p-4">
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">@ViewBag.Message</div>
+        }
+
+        <form asp-controller="Upload" asp-action="Index" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="OrderId" class="form-label"></label>
+                <input asp-for="OrderId" class="form-control" placeholder="Enter Order ID" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CustomerName" class="form-label"></label>
+                <input asp-for="CustomerName" class="form-control" placeholder="Enter Customer Name" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ProofOfPayment" class="form-label">Select File</label>
+                <input asp-for="ProofOfPayment" type="file" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Upload</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

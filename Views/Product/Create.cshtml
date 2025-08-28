@@ -1,0 +1,46 @@
+﻿@model ABCRetailers.Models.Product
+
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<div class="container py-4">
+    <h2>Create Product</h2>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="card shadow-sm p-4">
+        <!-- Display validation errors -->
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="ProductName" class="form-label"></label>
+            <input asp-for="ProductName" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label"></label>
+            <input asp-for="Price" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="StockAvailable" class="form-label"></label>
+            <input asp-for="StockAvailable" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Product Image</label>
+            <input type="file" name="image" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

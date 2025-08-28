@@ -1,0 +1,29 @@
+﻿@model ABCRetailers.ViewModels.OrderCreateViewModel
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="CustomerId"></label>
+        <select asp-for="CustomerId" class="form-control"
+                asp-items="@(new SelectList(Model.Customers, "RowKey", "Username"))">
+            <option value="">-- Select Customer --</option>
+        </select>
+        <span asp-validation-for="CustomerId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProductId"></label>
+        <select asp-for="ProductId" class="form-control"
+                asp-items="@(new SelectList(Model.Products, "RowKey", "ProductName"))">
+            <option value="">-- Select Product --</option>
+        </select>
+        <span asp-validation-for="ProductId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Quantity"></label>
+        <input asp-for="Quantity" class="form-control" />
+        <span asp-validation-for="Quantity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Order</button>
+</form>

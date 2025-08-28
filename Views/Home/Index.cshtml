@@ -1,0 +1,62 @@
+﻿@model ABCRetailers.ViewModels.HomeDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container py-4">
+
+    <h1 class="mb-4 text-center">Welcome to ABCRetailers</h1>
+
+    <!-- Dashboard Cards -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
+            <div class="card text-center shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">Customers</h5>
+                    <p class="display-6 fw-bold">@Model.CustomerCount</p>
+                    <a asp-controller="Customer" asp-action="Index" class="btn btn-outline-primary btn-sm">View Customers</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">Products</h5>
+                    <p class="display-6 fw-bold">@Model.ProductCount</p>
+                    <a asp-controller="Product" asp-action="Index" class="btn btn-outline-success btn-sm">View Products</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">Orders</h5>
+                    <p class="display-6 fw-bold">@Model.OrderCount</p>
+                    <a asp-controller="Order" asp-action="Index" class="btn btn-outline-warning btn-sm">View Orders</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Products -->
+    <h3 class="mb-3">Featured Products</h3>
+    <div class="row">
+        @foreach (var product in Model.FeaturedProducts)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.ProductName" style="height:180px; object-fit:cover;">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@product.ProductName</h5>
+                        <p class="card-text text-muted">$@product.Price</p>
+                        <a asp-controller="Product" asp-action="Details" asp-route-partitionKey="@product.PartitionKey" asp-route-rowKey="@product.RowKey" class="btn btn-sm btn-primary">Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
