@@ -10,10 +10,9 @@ namespace ABCRetailers.Models
         public string RowKey { get; set; }
         public ETag ETag { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
-
-        public string CustomerId { get; set; }   // maps to Customer.RowKey
+        public string CustomerId { get; set; }
         public string Username { get; set; }
-        public string ProductId { get; set; }    // maps to Product.RowKey
+        public string ProductId { get; set; }
         public string ProductName { get; set; }
         public DateTimeOffset OrderDate { get; set; }
         public int Quantity { get; set; }
@@ -21,7 +20,9 @@ namespace ABCRetailers.Models
         public double TotalPrice { get; set; }
         public string Status { get; set; }
 
-        // Constructor to initialize defaults
+        // Add this property for user-friendly Order ID
+        public string OrderId => RowKey; // Or generate a shorter format
+
         public Order()
         {
             PartitionKey = "Order";

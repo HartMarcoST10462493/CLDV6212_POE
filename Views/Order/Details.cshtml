@@ -1,90 +1,83 @@
 ﻿@model ABCRetailers.Models.Order
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Order Details";
 }
 
-<h1>Details</h1>
-
+<h1>Order Details</h1>
 <div>
-    <h4>Order</h4>
+    <h4>Order Information</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PartitionKey)
+        <dt class="col-sm-3">
+            Order ID
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PartitionKey)
+        <dd class="col-sm-9">
+            @Model.RowKey
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RowKey)
+
+        <dt class="col-sm-3">
+            Customer
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RowKey)
+        <dd class="col-sm-9">
+            @Model.Username
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Timestamp)
+
+        <dt class="col-sm-3">
+            Product
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Timestamp)
+        <dd class="col-sm-9">
+            @Model.ProductName
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerId)
+
+        <dt class="col-sm-3">
+            Order Date
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CustomerId)
+        <dd class="col-sm-9">
+            @Model.OrderDate.LocalDateTime.ToString("MM/dd/yyyy hh:mm tt")
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Username)
+
+        <dt class="col-sm-3">
+            Quantity
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Username)
+        <dd class="col-sm-9">
+            @Model.Quantity
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductId)
+
+        <dt class="col-sm-3">
+            Unit Price
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductId)
+        <dd class="col-sm-9">
+            $@Model.UnitPrice.ToString("N2")
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductName)
+
+        <dt class="col-sm-3">
+            Total Price
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductName)
+        <dd class="col-sm-9">
+            <strong>$@Model.TotalPrice.ToString("N2")</strong>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OrderDate)
+
+        <dt class="col-sm-3">
+            Status
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OrderDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UnitPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UnitPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
+        <dd class="col-sm-9">
+            <span class="badge bg-@(Model.Status == "Completed" ? "success" :
+                                                  Model.Status == "Processing" ? "warning" :
+                                                  Model.Status == "Cancelled" ? "danger" : "secondary")">
+                @Model.Status
+            </span>
         </dd>
     </dl>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mt-4">
+    @Html.ActionLink("Edit Order", "Edit", new { partitionKey = Model.PartitionKey, rowKey = Model.RowKey }, new { @class = "btn btn-primary" })
+
+    <!-- Add Payment Button if order is pending -->
+    @if (Model.Status == "Pending")
+    {
+        <a href="@Url.Action("Create", "Payment", new { orderId = Model.RowKey })" class="btn btn-success">Proceed to Payment</a>
+    }
+
+    <a asp-action="Index" class="btn btn-secondary">Back to Orders</a>
 </div>

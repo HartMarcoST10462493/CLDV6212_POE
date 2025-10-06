@@ -1,27 +1,32 @@
 using ABCRetailers.Services;
-using Microsoft.Extensions.Azure;
+using Azure.Data.Tables;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Register storage service (singleton is fine here)
+// Register your existing storage service
 builder.Services.AddSingleton<IAzureStorageService, AzureStorageService>();
-builder.Services.AddAzureClients(clientBuilder =>
-{
-    clientBuilder.AddBlobServiceClient(builder.Configuration["StorageConnection:blobServiceUri"]!).WithName("StorageConnection");
-    clientBuilder.AddQueueServiceClient(builder.Configuration["StorageConnection:queueServiceUri"]!).WithName("StorageConnection");
-    clientBuilder.AddTableServiceClient(builder.Configuration["StorageConnection:tableServiceUri"]!).WithName("StorageConnection");
-});
+
+// Add HTTP client factory for calling Azure Functions
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
-// Ensure storage resources exist (tables/containers/queues/shares)
+// Ensure storage resources exist
 using (var scope = app.Services.CreateScope())
 {
-    var storage = scope.ServiceProvider.GetRequiredService<IAzureStorageService>();
-    await storage.EnsureInitializedAsync();
+    try
+    {
+        var storage = scope.ServiceProvider.GetRequiredService<IAzureStorageService>();
+        await storage.EnsureInitializedAsync();
+    }
+    catch (Exception ex)
+    {
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Failed to initialize storage resources");
+    }
 }
 
 if (!app.Environment.IsDevelopment())
@@ -34,6 +39,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "upload",
+    pattern: "upload-proof",
+    defaults: new { controller = "Upload", action = "Index" });
 
 app.MapControllerRoute(
     name: "default",

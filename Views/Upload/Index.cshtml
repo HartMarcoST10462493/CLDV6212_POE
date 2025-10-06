@@ -1,41 +1,152 @@
 ﻿@model ABCRetailers.Models.FileUploadModel
-
 @{
     ViewData["Title"] = "Upload Proof of Payment";
 }
 
 <div class="container py-4">
-    <h2>Upload Proof of Payment</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Upload Proof of Payment</h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert @(ViewBag.IsSuccess ? "alert-success" : "alert-danger") alert-dismissible fade show" role="alert">
+                            @ViewBag.Message
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
 
-    <div class="card shadow-sm p-4">
-        @if (ViewBag.Message != null)
-        {
-            <div class="alert alert-success">@ViewBag.Message</div>
-        }
+                    <form asp-controller="Upload" asp-action="Index" method="post" enctype="multipart/form-data" id="uploadForm">
+                        @Html.AntiForgeryToken()
 
-        <form asp-controller="Upload" asp-action="Index" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-            <div class="mb-3">
-                <label asp-for="OrderId" class="form-label"></label>
-                <input asp-for="OrderId" class="form-control" placeholder="Enter Order ID" />
+                        <div class="mb-3">
+                            <label asp-for="OrderId" class="form-label fw-bold">Order ID *</label>
+                            <input asp-for="OrderId" class="form-control" id="orderIdInput"
+                                   placeholder="Enter your Order ID (e.g., a3c67j0b-tyed-4t6f-a51-3b817501592)" />
+                            <span asp-validation-for="OrderId" class="text-danger small"></span>
+                            <div id="orderInfo" class="form-text"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CustomerName" class="form-label fw-bold">Customer Name *</label>
+                            <input asp-for="CustomerName" class="form-control" id="customerNameInput"
+                                   placeholder="Enter the customer name as it appears on the order" />
+                            <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ProofOfPayment" class="form-label fw-bold">Proof of Payment File *</label>
+                            <input asp-for="ProofOfPayment" type="file" class="form-control" id="fileInput" accept=".pdf" />
+                            <span asp-validation-for="ProofOfPayment" class="text-danger small"></span>
+                            <div class="form-text">Only PDF files are accepted. Maximum file size: 10MB.</div>
+                            <div id="fileInfo" class="form-text mt-1"></div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                                <i class="fas fa-upload me-2"></i>Upload Proof of Payment
+                            </button>
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="CustomerName" class="form-label"></label>
-                <input asp-for="CustomerName" class="form-control" placeholder="Enter Customer Name" />
+            <!-- Information Card -->
+            <div class="card mt-4 border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Important Information</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>After uploading your proof of payment, your order status will be updated to "Processing"</li>
+                        <li>Our team will verify your payment within 24-48 hours</li>
+                        <li>Once verified, your order status will be updated to "Completed"</li>
+                        <li>Only PDF files are accepted for proof of payment</li>
+                        <li>Make sure the Order ID and Customer Name match your order details exactly</li>
+                        <li>An automated payment verification process will be started after upload</li>
+                    </ul>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label asp-for="ProofOfPayment" class="form-label">Select File</label>
-                <input asp-for="ProofOfPayment" type="file" class="form-control" />
-            </div>
-
-            <button type="submit" class="btn btn-success">Upload</button>
-        </form>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const orderIdInput = document.getElementById('orderIdInput');
+            const orderInfo = document.getElementById('orderInfo');
+            const customerNameInput = document.getElementById('customerNameInput');
+
+            // File validation with better feedback
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                fileInfo.innerHTML = '';
+
+                if (file) {
+                    const fileExtension = file.name.split('.').pop().toLowerCase();
+                    const fileName = file.name;
+                    const fileSize = (file.size / (1024 * 1024)).toFixed(2); // MB
+
+                    // Display file info
+                    fileInfo.innerHTML = `Selected: ${fileName} (${fileSize} MB)`;
+
+                    // Validate file type
+                    if (fileExtension !== 'pdf') {
+                        fileInfo.innerHTML = `<span class="text-danger">❌ Only PDF files are allowed. Selected file: ${fileName}</span>`;
+                        this.value = '';
+                        return;
+                    }
+
+                    // Check file size (10MB limit)
+                    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+                    if (file.size > maxSize) {
+                        fileInfo.innerHTML = `<span class="text-danger">❌ File size exceeds 10MB limit. Please choose a smaller file.</span>`;
+                        this.value = '';
+                        return;
+                    }
+
+                    // Valid file
+                    fileInfo.innerHTML = `<span class="text-success">✓ Valid PDF file selected: ${fileName}</span>`;
+                }
+            });
+
+            // AJAX order validation
+            orderIdInput.addEventListener('blur', function() {
+                const orderId = this.value.trim();
+                if (orderId.length > 0) {
+                    orderInfo.innerHTML = '<span class="text-info">Checking order...</span>';
+
+                    fetch(`/Upload/CheckOrder?orderId=${encodeURIComponent(orderId)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.exists) {
+                                orderInfo.innerHTML = `<span class="text-success">✓ Valid order found. Customer: ${data.customerName}, Status: ${data.currentStatus}, Amount: $${data.totalAmount}</span>`;
+                                // Auto-fill customer name if empty
+                                if (!customerNameInput.value) {
+                                    customerNameInput.value = data.customerName;
+                                }
+                            } else {
+                                orderInfo.innerHTML = '<span class="text-danger">✗ Order ID not found. Please check your Order ID.</span>';
+                            }
+                        })
+                        .catch(error => {
+                            orderInfo.innerHTML = '<span class="text-warning">⚠ Unable to verify order at this time.</span>';
+                        });
+                } else {
+                    orderInfo.innerHTML = '';
+                }
+            });
+        });
+    </script>
 }
