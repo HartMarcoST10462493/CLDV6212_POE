@@ -14,4 +14,7 @@
     <WebStackScaffolding_LayoutPageFile />
     <NameOfLastUsedPublishProfile>C:\Users\lab_services_student\source\repos\ABCRetailers\Properties\PublishProfiles\ABCRetailers - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

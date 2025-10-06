@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lab_services_student\\source\\repos\\ABCRetailers\\ABCRetailers.csproj": {}
+    "C:\\Users\\lab_services_student\\Documents\\GitHub\\CLDV6212_POE\\ABCRetailers.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lab_services_student\\source\\repos\\ABCRetailers\\ABCRetailers.csproj": {
+    "C:\\Users\\lab_services_student\\Documents\\GitHub\\CLDV6212_POE\\ABCRetailers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lab_services_student\\source\\repos\\ABCRetailers\\ABCRetailers.csproj",
+        "projectUniqueName": "C:\\Users\\lab_services_student\\Documents\\GitHub\\CLDV6212_POE\\ABCRetailers.csproj",
         "projectName": "ABCRetailers",
-        "projectPath": "C:\\Users\\lab_services_student\\source\\repos\\ABCRetailers\\ABCRetailers.csproj",
+        "projectPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\CLDV6212_POE\\ABCRetailers.csproj",
         "packagesPath": "C:\\Users\\lab_services_student\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lab_services_student\\source\\repos\\ABCRetailers\\obj\\",
+        "outputPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\CLDV6212_POE\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -70,6 +70,10 @@
               "target": "Package",
               "version": "[5.2.0, )"
             },
+            "Microsoft.Extensions.Azure": {
+              "target": "Package",
+              "version": "[1.13.0, )"
+            },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[8.0.7, )"
@@ -94,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
